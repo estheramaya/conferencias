@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Conferencistas
+{% endblock %}
+
+{% block container %}
+    <div class="row">
+        <!-- formulario -->
+        <div class="col-3">
+            <form action="{% url 'conferencistas' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" name="apellido" id="apellido" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="experiencia">Experiencia</label>
+                    <input type="text" name="experiencia" id="experiencia" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <input type="submit" class="btn btn-success" value="Registrar Conferencista">
+                </div>
+            </form>
+        </div>
+
+<!-- datos -->
+<div class="col-9">
+    {% if messages %}
+        <div class="alert alert-success mb-2">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <form action="" method="get">
+        <input type="search" name="q" value="{{ q|default_if_none:'' }}" class="form-control" placeholder="Buscar">
+    </form>
+
+    <h2 class="mt-4">Lista de Conferencistas: {{ conferencistas.count }}</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Experiencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in conferencistas %}
+            <tr>
+                <td>{{ c.nombre }}</td>
+                <td>{{ c.apellido }}</td>
+                <td>{{ c.experiencia }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-danger text-center">No se encontraron resultados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(function () {
+
+setTimeout(() => {
+    $('.alert').slideUp(function () {
+        $(this).remove();
+    });
+}, 2000)
+
+});
+</script>
+{% endblock  %}
